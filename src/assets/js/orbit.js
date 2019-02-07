@@ -18,6 +18,9 @@ function init() {
   // controls
   controls = new THREE.OrbitControls(camera, renderer.domElement)
 
+  // Interação
+  const interaction = new THREE.Interaction(renderer, scene, camera);
+
   controls.enableDamping = true // an animation loop is required when either damping or auto-rotation are enabled
   controls.dampingFactor = 0.25
   controls.screenSpacePanning = false
@@ -55,15 +58,22 @@ function generateCubes () {
     for (let column = 0; column < 3; column++) {
       for (let index = 0; index < 3; index++) {
         const geometry = new THREE.BoxBufferGeometry(20, 20, 20)
-        mesh = new THREE.Mesh( geometry )
-        mesh.name = `${wall}.${column}.${index}`
-        mesh.position.x = index * 21
-        mesh.position.y = column * 21
-        mesh.position.z = wall * 21
+        const cube = new THREE.Mesh( geometry )
+        cube.name = `${wall}.${column}.${index}`
+        cube.position.x = index * 21
+        cube.position.y = column * 21
+        cube.position.z = wall * 21
         console.log(`PAREDE: ${wall}, COLUNA: ${column}, ITEM: ${index}`)
-        mesh.callback = function() { console.log( this.name ); }
+        cube.callback = function() { console.log( this.name ); }
 
-        scene.add(mesh)
+        scene.add(cube)
+
+        cube.on('click', function (ev) {
+          console.log(ev)
+          // console.log(`PAREDE: ${wall}, COLUNA: ${column}, ITEM: ${index}`)
+
+          console.log('%c' + cube.name + '%c => click', 'color: #fff; background: #41b882; padding: 3px 4px;', 'color: #41b882; background: #fff;');
+        })
 
         document.body.appendChild( renderer.domElement )
       }
@@ -72,5 +82,5 @@ function generateCubes () {
 }
 
 function onDocumentMouseDown (event) {
-  console.log(event, scene)
+  // console.log(event, scene)
 }
